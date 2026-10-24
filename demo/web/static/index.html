@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>gemma-harness · live race</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="top">
+    <span class="logo">GEMMA-HARNESS</span>
+    <span id="mode-badge" class="mode-badge" hidden></span>
+    <span class="track">HARNESS TRACK · LIVE RACE</span>
+    <span class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+  </header>
+
+  <main>
+    <h1>Same prompt. Same faults. Two loops.</h1>
+    <p class="lede">Left: the plain Gemma 4 tool loop. Right: the same loop through gemma-harness. Chaos injects the same faults into both.</p>
+
+    <section class="toolbar" aria-label="Run controls">
+      <label class="field">
+        <span class="field-name">Prompt</span>
+        <select id="prompt"></select>
+      </label>
+
+      <fieldset class="chaos">
+        <legend class="field-name">Chaos</legend>
+        <label class="toggle"><input type="checkbox" value="bad_names"><span>misspelled tool</span></label>
+        <label class="toggle"><input type="checkbox" value="bad_args"><span>wrong args</span></label>
+        <label class="toggle"><input type="checkbox" value="blank"><span>blank reply</span></label>
+        <label class="toggle"><input type="checkbox" value="crash_tools"><span>tool crash</span></label>
+      </fieldset>
+
+      <div class="actions">
+        <button id="run" class="run" type="button">RUN ▶</button>
+        <button id="run-all" class="ghost" type="button">RUN ALL 15</button>
+        <label class="field">
+          <span class="field-name">Saved runs</span>
+          <select id="replays"></select>
+        </label>
+        <button id="replay" class="ghost" type="button">REPLAY</button>
+      </div>
+    </section>
+    <p class="keys">
+      Keys: <kbd>R</kbd> run · <kbd>A</kbd> run all · <kbd>1</kbd>–<kbd>4</kbd> chaos ·
+      <kbd>←</kbd> <kbd>→</kbd> prompt · <kbd>Space</kbd> replay the selected saved run
+    </p>
+
+    <div class="prompt-box">
+      <div id="banner" class="banner empty" role="status"></div>
+      <p id="prompt-text" class="prompt-text"></p>
+      <p id="prompt-expect" class="prompt-expect"></p>
+    </div>
+
+    <section class="lanes">
+      <article class="lane raw" id="lane-raw" aria-labelledby="raw-title">
+        <h2 id="raw-title">RAW GEMMA LOOP</h2>
+        <ol class="feed"></ol>
+        <div class="verdict" aria-live="polite" aria-atomic="true"></div>
+      </article>
+      <article class="lane harness" id="lane-harness" aria-labelledby="harness-title">
+        <h2 id="harness-title">GEMMA-HARNESS</h2>
+        <ol class="feed"></ol>
+        <div class="verdict" aria-live="polite" aria-atomic="true"></div>
+      </article>
+    </section>
+
+    <section class="score" aria-labelledby="score-title">
+      <div class="score-head">
+        <h2 id="score-title">SCOREBOARD</h2>
+        <span id="score-note" class="score-note"></span>
+        <button id="score-reset" class="ghost small" type="button">RESET</button>
+      </div>
+      <div class="tiles">
+        <div class="tile"><span class="tile-name">Runs</span><strong id="s-runs">0</strong></div>
+        <div class="tile raw"><span class="tile-name">Raw loop · silent failures</span><strong id="s-raw">0</strong></div>
+        <div class="tile harness"><span class="tile-name">Harness · silent failures</span><strong id="s-harness">0</strong></div>
+        <div class="tile harness"><span class="tile-name">Harness · fixes applied</span><strong id="s-fixes">0</strong></div>
+      </div>
+      <ul id="s-labels" class="label-counts" aria-label="Fixes by type"></ul>
+    </section>
+
+    <section id="sweep" class="sweep" aria-labelledby="sweep-title" hidden>
+      <div class="sweep-head">
+        <h2 id="sweep-title">WHOLE PACK</h2>
+        <span id="sweep-meta" class="sweep-meta"></span>
+      </div>
+      <div class="table-wrap" id="sweep-wrap">
+        <table>
+          <thead>
+            <tr><th scope="col">#</th><th scope="col">Prompt</th><th scope="col">Raw loop</th><th scope="col">Harness</th><th scope="col">Fixes</th><th scope="col" class="num">Raw s</th><th scope="col" class="num">Harness s</th></tr>
+          </thead>
+          <tbody id="sweep-rows"></tbody>
+          <tfoot id="sweep-summary"></tfoot>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

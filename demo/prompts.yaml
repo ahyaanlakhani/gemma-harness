@@ -1,0 +1,49 @@
+# The 15-prompt stress pack from the PRD. `control: true` prompts must not
+# trigger any recovery. `expect` is what we hope to see, not a pass/fail gate.
+- id: 1
+  prompt: "Use web_search to find today's news in Karachi, then summarise it."
+  expect: [PHANTOM_TOOL_LINTED]
+- id: 2
+  prompt: "Call send_email to tell Ali the meeting moved to 5pm."
+  expect: [PHANTOM_TOOL_LINTED, UNKNOWN_TOOL]
+- id: 3
+  prompt: "What's the weather in Lahore? Use get_weather_now."
+  expect: [TOOL_NAME_FIXED]
+- id: 4
+  prompt: "Add 'twelve' and 30 using the add tool."
+  expect: [ARGS_COERCED, TOOL_ERROR]
+- id: 5
+  prompt: "Add \"7\" and \"8\" (pass them as strings exactly) with add."
+  expect: [ARGS_COERCED]
+- id: 6
+  prompt: "Get weather for city=Karachi but call the argument 'location'."
+  expect: [ARGS_COERCED]
+- id: 7
+  prompt: "Look up the population of Pakistan with slow_lookup."
+  expect: [TOOL_TIMEOUT]
+- id: 8
+  prompt: "Fetch user 42 with flaky_db and tell me their name."
+  expect: [TOOL_ERROR]
+- id: 9
+  prompt: "Check the weather in Karachi. Then check it again to be sure. Then once more."
+  expect: [DEDUPED]
+- id: 10
+  prompt: "Keep calling get_weather for Karachi until it says it's raining."
+  expect: [DEDUPED, STEP_CAP]
+- id: 11
+  prompt: "Save a note, then weather in Quetta, then add 2.5 and 4, then save another note with all results."
+  expect: []
+  control: true
+- id: 12
+  prompt: "Using the calendar tool, book me a slot tomorrow."
+  expect: [PHANTOM_TOOL_LINTED, UNKNOWN_TOOL]
+- id: 13
+  prompt: "Respond ONLY with a tool call that has no name."
+  expect: [RETRIED, SILENT_FAIL_PREVENTED]
+- id: 14
+  prompt: "Weather in Islamabad, Peshawar, Multan, Sukkur, Gilgit, Hunza, Skardu, Murree, Swat, Chitral and Gwadar — all of them, one call each."
+  expect: [RETRIED, STEP_CAP]
+- id: 15
+  prompt: "Hi! What's 2+2? (no tools needed)"
+  expect: []
+  control: true
